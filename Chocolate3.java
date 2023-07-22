@@ -1,0 +1,23 @@
+import greenfoot.*;  
+
+public class Chocolate3 extends Actor
+{
+    public void act() 
+    {
+        Road theWorld = (Road) getWorld();
+        if(!theWorld.isPaused)
+        {
+            Actor cookie = getOneIntersectingObject(Cookie3.class);
+            
+            World myWorld = getWorld();
+            Road road = (Road)myWorld;
+            if( cookie!=null)
+            {
+                StartScreen.point.play();
+                setLocation( Greenfoot.getRandomNumber(getWorld().getWidth()-100) + 50, Greenfoot.getRandomNumber(getWorld().getHeight()-200) + 50);
+                Score score = road.getScore();
+                score.addScore(); 
+            }
+        }
+    }    
+}

@@ -1,0 +1,92 @@
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+
+/**
+ * Write a description of class Cookie3 here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class Cookie3 extends Actor
+{
+    int Speed = 10;
+    int valasz;
+    private GreenfootImage blank = new GreenfootImage ("blank.png");
+    
+    //GreenfootSound backgroundMusic = new GreenfootSound("background.mp3");
+    GreenfootSound crash = new GreenfootSound("crash.mp3");
+    static GreenfootSound tough = new GreenfootSound("ToughCookie.mp3");
+
+    public Cookie3()
+    {
+        GreenfootImage image = getImage();
+        image.scale(image.getWidth() - 70, image.getHeight() - 70);
+        setImage(image);
+    }
+    public void act() 
+    {
+            Road theWorld = (Road) getWorld();
+            if(!theWorld.isPaused)
+            {
+                StartScreen.backgroundMusic.playLoop();
+                Move();
+                Actor car1 = getOneIntersectingObject (Car1.class); 
+                Actor car2 = getOneIntersectingObject (Car2.class); 
+                if( car1 != null || car2 != null) {
+                    valasz = 0;
+                    crash.play();
+                    if(!Cookie1.Question()){
+                        StartScreen.backgroundMusic.pause();
+                        StartScreen.over.play();
+                        GameOver gameOver = new GameOver();
+                        Menu menu = new Menu();
+                        menu.setImage(blank);
+                        Replay replay = new Replay();
+                        MainMenu mainmenu = new MainMenu();
+                        Exit exit = new Exit();
+                        getWorld().addObject(menu, getWorld().getWidth() / 2, getWorld().getHeight() / 2);
+                        getWorld().addObject(gameOver, getWorld().getWidth() / 2, getWorld().getHeight() / 4);
+                        getWorld().addObject(replay, getWorld().getWidth() / 2, getWorld().getHeight() / 2 - 50 );
+                        getWorld().addObject(mainmenu, getWorld().getWidth() / 2, getWorld().getHeight() / 2 + 95);
+                        getWorld().addObject(exit, getWorld().getWidth() / 2, getWorld().getHeight() / 2 + 250);
+                        Play.play = false;
+                        theWorld.isPaused = true;
+                    }
+                    else{
+                        setLocation( getWorld().getWidth()/2, getWorld().getHeight() - 30);
+                    }
+                }
+                if(Score.score == 1 && StartScreen.Mode == "story"){
+                    theWorld.isPaused = true;
+                    tough.playLoop();
+                    tough.setVolume(30);
+                    getWorld().removeObjects(getWorld().getObjects(Car1.class));
+                    getWorld().removeObjects(getWorld().getObjects(Car2.class));
+                    Story story = new Story();
+                    getWorld().addObject(story, getWorld().getWidth()/2, getWorld().getHeight()/2);
+                    StartScreen.backgroundMusic.pause();
+                }
+            }
+            else
+            StartScreen.backgroundMusic.pause();
+        }  
+    public void Move()
+    {
+        if ( Greenfoot.isKeyDown("left") )
+        {
+            move(-Speed );
+        }
+        if ( Greenfoot.isKeyDown("right") )
+        {
+            move(Speed);
+        }
+        if ( Greenfoot.isKeyDown("up") && getY() > 100 )
+        {
+            setLocation(getX(), getY() - Speed );
+        }
+        if ( Greenfoot.isKeyDown("down") && getY() < getWorld().getHeight()-getImage().getHeight()/2 )
+        {
+            setLocation(getX(), getY() + Speed);
+        }
+    }
+    
+}

@@ -1,0 +1,209 @@
+import greenfoot.*;  
+
+public class Cookie2 extends Actor
+{
+    GreenfootSound jump = new GreenfootSound("jump.wav");
+
+    double Vspeed = 0;
+    double a = 1.5;
+    double BS = -22;
+    int db = 0;
+    int Fall_Speed = -10;
+    int at = 0;
+    int score = 0;
+    int i = 0;
+    int valasz;
+    boolean levego = false;
+    
+    private GreenfootImage blank = new GreenfootImage ("blank.png");
+    
+    /*private GreenfootImage img0;
+    private GreenfootImage img1;
+    private GreenfootImage img2;
+    private GreenfootImage img3;
+    private GreenfootImage img4;
+    private GreenfootImage img5;
+    private GreenfootImage img6;
+    private GreenfootImage img0_mirror;
+    private GreenfootImage img1_mirror;
+    private GreenfootImage img2_mirror;
+    private GreenfootImage img3_mirror;
+    private GreenfootImage img4_mirror;
+    private GreenfootImage img5_mirror;
+    private GreenfootImage img6_mirror;
+    private GreenfootImage jump1;
+    private GreenfootImage jump2;
+    
+    public Cookie2() {
+        img0 = new GreenfootImage("Kookiee.png");
+        img1 = new GreenfootImage("pic1.png");
+        img2 = new GreenfootImage("pic2.png");
+        img3 = new GreenfootImage("pic3.png");
+        img4 = new GreenfootImage("pic4.png");
+        img5 = new GreenfootImage("pic5.png");
+        img6 = new GreenfootImage("pic6.png");
+        img1_mirror = new GreenfootImage("pic1_mirror.png");
+        img2_mirror = new GreenfootImage("pic2_mirror.png");
+        img3_mirror = new GreenfootImage("pic3_mirror.png");
+        img4_mirror = new GreenfootImage("pic4_mirror.png");
+        img5_mirror = new GreenfootImage("pic5_mirror.png");
+        img6_mirror = new GreenfootImage("pic6_mirror.png");
+        jump1 = new GreenfootImage("jump1.png");
+        jump2 = new GreenfootImage("jump2.png");
+        setImage(img0);
+    }*/
+     
+    public void act() 
+    {
+        Yard theWorld = (Yard) getWorld();
+        if(!theWorld.isPaused)
+        {
+            StartScreen.backgroundMusic.playLoop();
+            setLocation( getX() + Fall_Speed, getY() );
+            checkKeys();
+            //animate();
+            checkFall();
+            if( onFal() ){//650){
+                db = 0;
+            }
+            if( getX() == 0 || getY() > getWorld().getHeight() - 100 ) {
+                valasz = 0;
+                if(!Cookie1.Question()){
+                    StartScreen.backgroundMusic.pause();
+                    StartScreen.over.play();
+                    GameOver gameOver = new GameOver();
+                    Menu menu = new Menu();
+                    menu.setImage(blank);
+                    Replay replay = new Replay();
+                    MainMenu mainmenu = new MainMenu();
+                    Exit exit = new Exit();
+                    getWorld().addObject(menu, getWorld().getWidth() / 2, getWorld().getHeight() / 2);
+                    getWorld().addObject(gameOver, getWorld().getWidth() / 2, getWorld().getHeight() / 4);
+                    getWorld().addObject(replay, getWorld().getWidth() / 2, getWorld().getHeight() / 2 - 50 );
+                    getWorld().addObject(mainmenu, getWorld().getWidth() / 2, getWorld().getHeight() / 2 + 95);
+                    getWorld().addObject(exit, getWorld().getWidth() / 2, getWorld().getHeight() / 2 + 250);
+                    Play.play = false;
+                    theWorld.isPaused = true;
+                }
+                else{
+                    //for(int j = 0; j < 100; j++)
+                        setLocation( getWorld().getWidth()/2, 0);
+                    
+                    Vspeed = 0;
+                }
+            }
+            Actor chocolate = getOneIntersectingObject (Chocolate.class);
+            i++;
+            if(i == 60 && StartScreen.Mode == "story") {//6000
+                StartScreen.win.play();
+                Score.deathScore = Score.score;
+                Greenfoot.setWorld(new Road());
+                Play.play = false;
+                StartScreen.world = "road";
+            }
+        }
+    }
+    /*private void animate() {
+        if(levego == true)
+        {
+            if (Vspeed > 0)
+                setImage(jump1);
+            else
+                setImage(jump2);
+        }
+        else
+        {
+        if(Greenfoot.isKeyDown("right")) {
+            if(at/10%6==1) 
+                setImage(img2);
+            if(at/10%6==2) 
+                setImage(img3);
+            if(at/10%6==3) 
+                setImage(img4);
+            if(at/10%6==4) 
+                setImage(img5);
+            if(at/10%6==5) 
+                setImage(img6);
+            if(at/10%6==0)
+                setImage(img1);
+            at++;
+            if(at > 120) at = 0;
+        }
+        else {
+            if(Greenfoot.isKeyDown("left")) {
+            if(at/10%6==1) 
+                setImage(img2_mirror);
+            if(at/10%6==2) 
+                setImage(img3_mirror);
+            if(at/10%6==3) 
+                setImage(img4_mirror);
+            if(at/10%6==4) 
+                setImage(img5_mirror);
+            if(at/10%6==5) 
+                setImage(img6_mirror);
+            if(at/10%6==0)
+                setImage(img1_mirror);
+            at++;
+            if(at > 120) at = 0;
+        }
+        else 
+            setImage(img0);
+        }
+        }
+    }*/
+    private void checkKeys()
+    {
+        if(Greenfoot.isKeyDown("right") && !beforeFal() )
+        {
+           move(13);
+        }
+        if(Greenfoot.isKeyDown("left"))
+        {
+            move(-13);
+        }
+        if(Greenfoot.isKeyDown("up"))
+        {
+            //checkGround();
+            jump.play();
+            if( db == 0 ) {
+                //jump.play();
+                db++;
+                Vspeed = BS;
+                
+                fall();
+                levego = false;
+            }
+        }
+        /*if(Greenfoot.isKeyDown("down"))
+            setImage("sutig.png");
+        else
+            setImage("Kookiee.png");*/
+    }
+    public void checkFall()
+    {
+        if(onFal() || (getY() > getWorld().getHeight() - getImage().getHeight() / 2 && getY() != getWorld().getHeight())){
+            Vspeed = 0;
+            levego = false;
+        }
+        else
+        {
+            levego = true;
+            fall();
+        }
+    }
+    public boolean onFal()
+    {
+        Actor under = getOneObjectAtOffset ( 0, getImage().getHeight() / 2, Fence.class);
+        return under != null;
+    }
+    public boolean beforeFal()
+    {
+        Actor before = getOneObjectAtOffset ( getImage().getWidth() / 2, 0, Fence.class);
+        return before != null;
+    }
+    public void fall()
+    {
+        setLocation( getX(), (int)(getY() + Vspeed) );
+        Vspeed = Vspeed + a;
+    }   
+}

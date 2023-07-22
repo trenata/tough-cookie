@@ -1,0 +1,129 @@
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+
+/**
+ * Write a description of class Cookie1 here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class Cookie1 extends Actor
+{
+    int Speed = 10;
+    int score = 0;
+    int i = 0;
+    int valasz;
+    int x = 1;
+    int y = 3;
+    private GreenfootImage stand = new GreenfootImage ("stand.png");
+    private GreenfootImage r1 = new GreenfootImage ("run1.png");
+    private GreenfootImage r2 = new GreenfootImage ("run2.png");
+    private GreenfootImage r3 = new GreenfootImage ("run3.png");
+    private GreenfootImage r4 = new GreenfootImage ("run4.png");
+    private GreenfootImage r5 = new GreenfootImage ("run5.png");
+    private GreenfootImage r6 = new GreenfootImage ("run6.png");
+    private GreenfootImage r7 = new GreenfootImage ("run7.png");
+    private GreenfootImage r8 = new GreenfootImage ("run8.png");
+    public void act() 
+    {
+        i++;
+        //System.out.println(i);
+        setLocation( getX() - Speed, getY() );
+        
+        Move();
+        Animate();
+        Actor obstacle = getOneIntersectingObject (Obstacle.class); 
+        if( getX() == 0 || obstacle != null) {
+            valasz = 0;
+            Question();
+        }
+        if(i == 60) {//6000
+            Greenfoot.setWorld(new Yard());
+            Play.play = false;
+        }
+    } 
+    public void Move()
+    {
+        if ( Greenfoot.isKeyDown("left") )
+        {
+            move(-(Speed + 2));
+        }
+        if ( Greenfoot.isKeyDown("right") )
+        {
+            move(Speed+2);
+        }
+        if ( Greenfoot.isKeyDown("up") && getY() > 100 )
+        {
+            setLocation(getX(), getY() - (Speed + 2));
+        }
+        if ( Greenfoot.isKeyDown("down") && getY() < getWorld().getHeight()-getImage().getHeight()/2 )
+        {
+            setLocation(getX(), getY() + Speed + 2);
+        }
+    }
+    public void Animate()
+    {
+        if ( Greenfoot.isKeyDown("right")){
+             x++;
+            if(x<y)
+            setImage(r1);
+            if(getImage().equals(r1) && x>y)
+                    setImage(r2);
+            else
+            if(getImage().equals(r2) && x>2*y)
+                setImage(r3);
+            else
+            if(getImage().equals(r3) && x>3*y)
+                setImage(r4);
+            else
+            if(getImage().equals(r4) && x>4*y)
+                setImage(r5);
+            else
+            if(getImage().equals(r5) && x>5*y)
+                setImage(r6);
+            else
+            if(getImage().equals(r6) && x>6*y)
+                setImage(r7);
+            else
+            if(getImage().equals(r7) && x>7*y)
+                setImage(r8);
+            else if(x>8*y){
+                setImage(r1);
+                x=0;
+            }
+        }
+        if(!Greenfoot.isKeyDown("right"))
+            setImage(stand);
+    }
+    public void Question()
+    {
+        int v = Greenfoot.getRandomNumber(3);
+        int valasz = 0;
+        boolean jo = true;
+        switch (v)
+        {
+            case 0:valasz = Integer.parseInt(Greenfoot.ask("Mennyi 6*7 ?"));
+                if(valasz != 42)
+                    jo = false;
+            break;
+            case 1: valasz = Integer.parseInt(Greenfoot.ask("Mennyi gyok(169) ?"));
+                 if(valasz != 13)
+                    jo = false;
+            break;
+            case 2:valasz = Integer.parseInt(Greenfoot.ask("Mennyi 17 + 2 ?"));
+                if(valasz != 19)
+                    jo = false;
+            break;   
+        }
+        if(jo == false)
+        {
+            //backgroundMusic.pause();
+            //over.play();
+            GameOver gameOver = new GameOver();
+            getWorld().addObject(gameOver, getWorld().getWidth() / 2, getWorld().getHeight() / 2);
+            Play.play = false;
+            Greenfoot.stop();
+        }
+        else 
+            setLocation(getWorld().getWidth() / 2, 0 );
+    }
+}

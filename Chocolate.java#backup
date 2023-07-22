@@ -1,0 +1,29 @@
+import greenfoot.*;  
+
+public class Chocolate extends Actor
+{
+    int Speed = -10;
+    private int score = 0;
+    static boolean intersect = false;
+    public void act() 
+    {
+        Kitchen theWorld = (Kitchen) getWorld();
+        if(!theWorld.isPaused)
+        {    
+            Actor chocolate = getOneIntersectingObject (Cookie1.class);
+        
+            World myWorld = getWorld();
+            Kitchen kitchen = (Kitchen)myWorld;
+            if(getX() == 0 || getY() < 10 || getY() > 500) 
+                 getWorld().removeObject(this);
+            else
+            if(chocolate != null){
+                
+                getWorld().removeObject(this);
+                Score score = kitchen.getScore();
+                score.addScore();
+            }
+            else setLocation( getX() + Speed, getY() );
+        }
+    }
+  }     
